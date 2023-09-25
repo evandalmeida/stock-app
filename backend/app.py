@@ -1,18 +1,17 @@
-from flask import Flask, jsonify, request
+
+from flask import Flask, request, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from models import User, Notification, Watchlist, Stock, watchlist_stock
+from models import db, User, Notification, Watchlist, Stock, watchlist_stock
 
-# Initialize Flask application
 app = Flask(__name__)
-
-# Configure SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # Use SQLite for simplicity
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.json.compact = False
 
-# Initialize SQLAlchemy and Migrate
-db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+db.init_app(app)
 
 # Additional routes and error handling go here
 
