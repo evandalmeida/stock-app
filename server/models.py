@@ -14,6 +14,8 @@ class User(db.Model):
     # Relationships
     # Many-to-One: A user can have multiple notifications
     notifications = db.relationship('Notification', backref='user', lazy=True)
+
+    
     # Many-to-One: A user can have multiple watchlists
     watchlists = db.relationship('Watchlist', backref='user', lazy=True)
 
