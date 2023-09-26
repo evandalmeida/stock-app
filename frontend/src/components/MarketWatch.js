@@ -12,11 +12,11 @@ const center = {
 };
 
 const locations = [
-  { name: 'United States', lat: 37.0902, lng: -95.7129 },
-  { name: 'Europe', lat: 54.5260, lng: 15.2551 },
-  { name: 'Asia', lat: 34.0479, lng: 100.6197 },
-  { name: 'Australia', lat: -25.2744, lng: 133.7751 },
-  { name: 'Canada', lat: 56.1304, lng: -106.3468 }
+  { name: 'United States', lat: 37.0902, lng: -95.7129 }
+  // { name: 'Europe', lat: 54.5260, lng: 15.2551 },
+  // { name: 'Asia', lat: 34.0479, lng: 100.6197 },
+  // { name: 'Australia', lat: -25.2744, lng: 133.7751 },
+  // { name: 'Canada', lat: 56.1304, lng: -106.3468 }
 ];
 
 function MarketWatch() {
@@ -29,14 +29,15 @@ function MarketWatch() {
       .then(data => setApiKey(data.apiKey))
       .catch(error => {
         console.error("Error fetching Google Maps API key:", error);
-        setError(error); // Set error state
+        setError('Error loading Google Maps!'); // Set error state with a message
       });
   }, []);
 
   return (
     <>
-      {error && <p>Error loading Google Maps!</p>}
-      {apiKey ? (
+      {error ? (
+        <p>{error}</p> // Display error message if there is an error
+      ) : apiKey ? (
         <LoadScript googleMapsApiKey={apiKey}>
           <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={2}>
             {locations.map((location, index) => (
