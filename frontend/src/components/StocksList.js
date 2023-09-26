@@ -5,9 +5,14 @@ function StocksList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch the most active stocks from the backend
-    fetch('/api/most-active-stocks')
-      .then(response => response.json())
+    // Fetch all available stocks from the backend
+    fetch('/api/all-stocks')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(data => setStocks(data))
       .catch(error => {
         console.error("Error fetching stock data:", error);
@@ -17,14 +22,14 @@ function StocksList() {
 
   return (
     <div>
-      <h1>Most Active Stocks</h1>
+      <h1>All Available Stocks</h1>
       {error ? (
         <p>{error}</p> // Display the error message
       ) : stocks.length > 0 ? (
         <ul>
           {stocks.map(stock => (
             <li key={stock.symbol}>
-              {stock.symbol} ({stock.companyName}): ${stock.latestPrice}
+              {stock.symbol} ({stock.name})
             </li>
           ))}
         </ul>

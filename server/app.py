@@ -11,14 +11,13 @@ from models import db, User, Notification, Watchlist, Stock, watchlist_stock
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
 IEX_API_KEY = "pk_8f8ee267b6704587821b2411cfc46021"
-IEX_ENDPOINT = f"https://cloud.iexapis.com/stable/stock/market/list/mostactive?token={IEX_API_KEY}"
-GOOGLE_MAPS_API_KEY = "AIzaSyCTYs930QhE82JCgvnNEDiaCeJmHkjND1c"
+IEX_ENDPOINT = f"https://cloud.iexapis.com/stable/ref-data/symbols?token={IEX_API_KEY}"
+GOOGLE_MAPS_API_KEY = "GET_KEY"
 
 migrate = Migrate(app, db)
 db.init_app(app)
@@ -28,13 +27,13 @@ def index():
     response = requests.get(IEX_ENDPOINT)
     if response.status_code == 200:
         stocks = response.json()
-        stocks_list = [f"{stock['symbol']} ({stock['companyName']}): ${stock['latestPrice']}" for stock in stocks]
+        stocks_list = [f"{stock['symbol']} ({stock['name']})" for stock in stocks]
         return '<br>'.join(stocks_list)
     else:
         return "Failed to fetch data from IEX Cloud", 500
 
-@app.route('/api/most-active-stocks', methods=['GET'])
-def most_active_stocks():
+@app.route('/api/all-stocks', methods=['GET'])
+def all_stocks():
     response = requests.get(IEX_ENDPOINT)
     if response.status_code == 200:
         return jsonify(response.json())

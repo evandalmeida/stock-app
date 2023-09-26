@@ -7,16 +7,17 @@ const containerStyle = {
 };
 
 const center = {
-  lat: 20,
-  lng: 0
+  lat: 32,
+  lng: 20
 };
 
+
 const locations = [
-  { name: 'United States', lat: 37.0902, lng: -95.7129 }
-  // { name: 'Europe', lat: 54.5260, lng: 15.2551 },
-  // { name: 'Asia', lat: 34.0479, lng: 100.6197 },
-  // { name: 'Australia', lat: -25.2744, lng: 133.7751 },
-  // { name: 'Canada', lat: 56.1304, lng: -106.3468 }
+  { name: 'United States', lat: 37.0902, lng: -95.7129 },
+  { name: 'Europe', lat: 54.5260, lng: 15.2551 },
+  { name: 'Asia', lat: 34.0479, lng: 100.6197 },
+  { name: 'Australia', lat: -25.2744, lng: 133.7751 },
+  { name: 'Canada', lat: 56.1304, lng: -106.3468 }
 ];
 
 function MarketWatch() {
