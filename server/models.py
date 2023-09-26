@@ -2,8 +2,14 @@ from datetime import datetime
 from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
 
+metadata = MetaData(naming_convention={
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+})
+
  
 db = SQLAlchemy(metadata=metadata)
+
+
 
 # User Model
 class User(db.Model):
@@ -19,10 +25,6 @@ class User(db.Model):
     # Many-to-One: A user can have multiple watchlists
     watchlists = db.relationship('Watchlist', backref='user', lazy=True)
 
-
-
-
-
 # Notification Model
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,10 +32,6 @@ class Notification(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
-
-
-
 
 # Watchlist Model
 class Watchlist(db.Model):
@@ -43,9 +41,6 @@ class Watchlist(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     # Many-to-Many: A watchlist can contain multiple stocks and a stock can be part of multiple watchlists
     stocks = db.relationship('Stock', secondary='watchlist_stock', backref='watchlists', lazy=True)
-
-
-
 
 # Stock Model
 class Stock(db.Model):
