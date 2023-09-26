@@ -18,7 +18,7 @@ app.json.compact = False
 
 IEX_API_KEY = "pk_8f8ee267b6704587821b2411cfc46021"
 IEX_ENDPOINT = f"https://cloud.iexapis.com/stable/stock/market/list/mostactive?token={IEX_API_KEY}"
-GOOGLE_MAPS_API_KEY = "AIzaSyAIWDe9kyYVKMu9wgahFhsXrrfUZaGG5bw"
+GOOGLE_MAPS_API_KEY = "PUT_IN_YOUR_OWN_KEY"
 
 migrate = Migrate(app, db)
 db.init_app(app)
