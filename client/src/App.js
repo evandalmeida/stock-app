@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import UserPanel from './components/UserPanel/user_index';
 import MarketWatch from './components/MarketWatch';
+import StocksList from './components/StocksList';
 
 
 const POST_HEADERS = {
@@ -8,14 +9,14 @@ const POST_HEADERS = {
   'Accepts': 'application/json'
 }
 
-const URL = "/api/v1"
+
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null)
 
   useEffect(() => {
     async function checkSession() {
-      const response = await fetch(URL + '/check_session')
+      const response = await fetch('/check_session')
 
       if (response.ok) {
         const data = await response.json()
@@ -26,7 +27,7 @@ function App() {
   }, [])
 
   async function attemptSignup(userInfo) {
-    const res = await fetch(URL + '/users', {
+    const res = await fetch('/users', {
       method: 'POST',
       headers: POST_HEADERS,
       body: JSON.stringify(userInfo)
@@ -35,12 +36,12 @@ function App() {
       const data = await res.json()
       setCurrentUser(data)
     } else {
-      alert('Invalid sign up')
+      alert('Invalid login')
     }
   }
 
   async function attemptLogin(userInfo) {
-    const res = await fetch(URL + '/login', {
+    const res = await fetch('/login', {
       method: 'POST',
       headers: POST_HEADERS,
       body: JSON.stringify(userInfo)
@@ -55,7 +56,7 @@ function App() {
 
   function logout() {
     setCurrentUser(null)
-    fetch(URL + '/logout', {
+    fetch('/logout', {
       method: 'DELETE'
     })
   }
@@ -69,6 +70,7 @@ function App() {
           attemptSignup={attemptSignup}
           logout={logout} />
       <MarketWatch/>
+      <StocksList/>
     </>
   );
 }

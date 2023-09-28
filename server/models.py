@@ -24,6 +24,9 @@ class User(db.Model, SerializerMixin):
     # SERIALIZATION RULES
     serialize_rules = ("-password_hash",)  # Exclude 'password_hash' field
 
+
+
+
 class Notification(db.Model, SerializerMixin):
     __tablename__ = 'notifications'
     id = db.Column(db.Integer, primary_key=True)
@@ -52,8 +55,6 @@ class Stock(db.Model, SerializerMixin):
     symbol = db.Column(db.String(10), unique=True, nullable=False)
     name = db.Column(db.String(120), nullable=False)
 
-    # SERIALIZATION RULES
-    serialize_rules = ()  # No specific rules, include all fields by default
 
 watchlist_stock = db.Table('watchlist_stock',
     db.Column('watchlist_id', db.Integer, db.ForeignKey('watchlist.id'), primary_key=True),

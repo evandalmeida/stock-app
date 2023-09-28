@@ -1,14 +1,8 @@
 import { useState } from 'react'
 
 function Signup({attemptSignup}) {
-
-  // STATE //
-
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-
-  // EVENTS //
-
   const handleChangeUsername = e => setUsername(e.target.value)
   const handleChangePassword = e => setPassword(e.target.value)
 
@@ -17,11 +11,8 @@ function Signup({attemptSignup}) {
     attemptSignup({username, password})
   }
 
-  // RENDER //
-
   return (
     <form className='user-form' onSubmit={handleSubmit}>
-
       <h2>Signup</h2>
 
       <input type="text"
@@ -39,10 +30,8 @@ function Signup({attemptSignup}) {
       <input type="submit"
       value='Signup'
       />
-
     </form>
   )
-
 }
 
 export default Signup
