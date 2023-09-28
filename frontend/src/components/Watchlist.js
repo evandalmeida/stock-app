@@ -1,12 +1,23 @@
-import React from 'react';
-import ChatBot from './ChatBot';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function WatchList() {
+  const [stocks, setStocks] = useState([]);
+  
+  useEffect(() => {
+    axios.get('/api/watchlist')
+      .then(response => setStocks(response.data))
+      .catch(error => console.error('Error fetching watchlist:', error));
+  }, []);
+  
   return (
     <div>
       <h2>WatchList</h2>
-      {/* Render the user's watchlist here */}
-      <ChatBot/>
+      <ul>
+        {stocks.map(stock => (
+          <li key={stock.id}>{stock.symbol} ({stock.name})</li>
+        ))}
+      </ul>
     </div>
   );
 }
