@@ -36,12 +36,14 @@ function App() {
       const data = await res.json()
       setCurrentUser(data)
     } else {
-      alert('Invalid login')
+      const errorData = await res.json();
+      alert(errorData.error || 'Invalid sign up'); // Display the error from backend
     }
   }
+  
 
-  async function attemptLogin(userInfo) {
-    const res = await fetch('/login', {
+async function attemptLogin(userInfo) {
+    const res = await fetch('login', {
       method: 'POST',
       headers: POST_HEADERS,
       body: JSON.stringify(userInfo)
@@ -50,9 +52,10 @@ function App() {
       const data = await res.json()
       setCurrentUser(data)
     } else {
-      alert('Invalid sign up')
+      alert('Invalid login') // Fix this message
     }
-  }
+}
+
 
   function logout() {
     setCurrentUser(null)

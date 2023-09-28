@@ -21,11 +21,12 @@ function Login({attemptLogin}) {
       placeholder='username'
       />
 
-      <input type="text"
+      <input type="password"
       onChange={handleChangePassword}
       value={password}
       placeholder='password'
       />
+
 
       <input type="submit"
       value='Login'

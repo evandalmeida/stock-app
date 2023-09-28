@@ -4,9 +4,9 @@ from flask_cors import CORS, cross_origin
 from flask_bcrypt import Bcrypt
 import yfinance as yf
 from models import db, User, Notification, Watchlist
-
+from models import bcrypt 
 app = Flask(__name__)
-
+bcrypt.init_app(app)
 # Configuration
 CORS(app, resources={
     r"/*": {
@@ -19,9 +19,9 @@ CORS(app, resources={
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
-app.secret_key = 'get from discord'
+app.secret_key = ''
 
-GOOGLE_MAPS_API_KEY = 'get from discord'
+GOOGLE_MAPS_API_KEY = ''
 
 bcrypt = Bcrypt(app)
 
@@ -75,28 +75,34 @@ def get_maps_config():
 def create_user():
     try:
         data = request.json
-        password_hash = bcrypt.generate_password_hash(data["password"]).decode('utf-8')
-        new_user = User(
-            username=data['username'], 
-            password_hash=password_hash
-        )
-        db.session.add(new_user)
-        db.session.commit()
+        hashed_pw = bcrypt.generate_password_hash(data["password"].encode('utf-8'),10)
+        new_user = User.create(username=data['username'], hashed_password=hashed_pw)
+
+        
         session['user_id'] = new_user.id
         return new_user.to_dict(), 201
     except Exception as e:
         return { 'error': str(e) }, 406
+    
+    
 
-@app.post('/login')
+
+
+
+@app.route('/login', methods=['POST'])
 def login():
     data = request.json
-    user = User.query.filter(User.username == data['username']).first()
-
-    if user and bcrypt.check_password_hash(user.password_hash, data["password"]):
+    user = User.query.filter_by(username=data['username']).first()
+    
+    if user and bcrypt.check_password_hash(user.password_hash.encode('utf-8'), data["password"].encode('utf-8')):
         session['user_id'] = user.id
-        return user.to_dict(), 200
+        return jsonify(user.to_dict())
     else:
-        return { "error": "Invalid username or password" }, 401
+        return jsonify(message="Invalid username or password"), 401
+
+
+
+
 
 @app.delete('/logout')
 def logout():
@@ -143,3 +149,4 @@ def get_watchlist():
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+    
