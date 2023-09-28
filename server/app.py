@@ -5,8 +5,14 @@ from flask_bcrypt import Bcrypt
 import yfinance as yf
 from models import db, User, Notification, Watchlist
 from models import bcrypt 
+
+
+
 app = Flask(__name__)
 bcrypt.init_app(app)
+
+
+
 # Configuration
 CORS(app, resources={
     r"/*": {
@@ -19,9 +25,9 @@ CORS(app, resources={
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
-app.secret_key = ''
+app.secret_key = 'f9cf27c663bc31db958e7e7d2a994daa'
 
-GOOGLE_MAPS_API_KEY = ''
+GOOGLE_MAPS_API_KEY = 'AIzaSyCGHPdpYqUMsmidb0QPMEpfiGYIGkvruPU'
 
 bcrypt = Bcrypt(app)
 
