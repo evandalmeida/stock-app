@@ -20,9 +20,9 @@ CORS(app, resources={
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
-app.secret_key = 'f9cf27c663bc31db958e7e7d2a994daa'
+app.secret_key = 'get key from discord'
 
-GOOGLE_MAPS_API_KEY = "paste key from discord"
+GOOGLE_MAPS_API_KEY = "get key from discord"
 
 
 migrate = Migrate(app, db)
