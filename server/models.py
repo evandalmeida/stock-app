@@ -1,60 +1,60 @@
 from datetime import datetime
-from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash
+from sqlalchemy import MetaData
+from sqlalchemy.orm import validates
+from sqlalchemy_serializer import SerializerMixin
 
 metadata = MetaData(naming_convention={
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
 })
 
- 
 db = SQLAlchemy(metadata=metadata)
 
-
-
-# User Model
-class User(db.Model):
+class User(db.Model, SerializerMixin):
+    # TABLE #
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
-    # Additional User fields go here
+    username = db.Column(db.String, unique=True, nullable=False)
+    password_hash = db.Column(db.String, nullable=False)
 
-    # Relationships
-    # Many-to-One: A user can have multiple notifications
+    # RELATIONSHIPS #
     notifications = db.relationship('Notification', backref='user', lazy=True)
-
-    # Many-to-One: A user can have multiple watchlists
     watchlists = db.relationship('Watchlist', backref='user', lazy=True)
 
+    # SERIALIZATION RULES
+    serialize_rules = ("-password_hash",)  # Exclude 'password_hash' field
 
-# Notification Model
-class Notification(db.Model):
+class Notification(db.Model, SerializerMixin):
+    __tablename__ = 'notifications'
     id = db.Column(db.Integer, primary_key=True)
-    # Many-to-One: Each notification is associated with one user
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
+    user = db.relationship('User', back_populates='notifications')
 
-# Watchlist Model
-class Watchlist(db.Model):
+    # SERIALIZATION RULES
+    serialize_rules = ("-user",)  # Exclude 'user' relationship
+
+class Watchlist(db.Model, SerializerMixin):
+    __tablename__ = 'watchlists'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
-    # Many-to-One: Each watchlist is associated with one user
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    # Many-to-Many: A watchlist can contain multiple stocks and a stock can be part of multiple watchlists
     stocks = db.relationship('Stock', secondary='watchlist_stock', backref='watchlists', lazy=True)
 
+    # SERIALIZATION RULES
+    serialize_rules = ("-user",)  # Exclude 'user' relationship
 
-# Stock Model
-class Stock(db.Model):
+class Stock(db.Model, SerializerMixin):
+    __tablename__ = 'stocks'
     id = db.Column(db.Integer, primary_key=True)
     symbol = db.Column(db.String(10), unique=True, nullable=False)
     name = db.Column(db.String(120), nullable=False)
 
+    # SERIALIZATION RULES
+    serialize_rules = ()  # No specific rules, include all fields by default
 
-# Watchlist_Stock Join Table
-# Facilitates the Many-to-Many relationship between Watchlist and Stock
 watchlist_stock = db.Table('watchlist_stock',
     db.Column('watchlist_id', db.Integer, db.ForeignKey('watchlist.id'), primary_key=True),
     db.Column('stock_id', db.Integer, db.ForeignKey('stock.id'), primary_key=True)

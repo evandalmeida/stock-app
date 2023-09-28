@@ -1,44 +1,75 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/NavBar';
-import Header from './components/Header';
-import Signup from './components/Signup';
-import Login from './components/Login';
-import UserDashboard from './components/UserDashboard';
-import WatchList from './components/WatchList';
+import { useState, useEffect } from 'react'
+import UserPanel from './components/UserPanel/user_index';
 import MarketWatch from './components/MarketWatch';
-import StocksList from './components/StocksList';
-import ProtectedRoute from './components/ProtectedRoute';
-import { AuthProvider } from './components/AuthContextProvider';
 
-function Home() {
-  return (
-    <>
-      <MarketWatch />
-      <StocksList/>
-    </>
-  );
+
+const POST_HEADERS = {
+  'Content-Type': 'application/json',
+  'Accepts': 'application/json'
 }
 
+const URL = "/api/v1"
+
 function App() {
+  const [currentUser, setCurrentUser] = useState(null)
+
+  useEffect(() => {
+    async function checkSession() {
+      const response = await fetch(URL + '/check_session')
+
+      if (response.ok) {
+        const data = await response.json()
+        setCurrentUser( data )
+      }
+    }
+    checkSession()
+  }, [])
+
+  async function attemptSignup(userInfo) {
+    const res = await fetch(URL + '/users', {
+      method: 'POST',
+      headers: POST_HEADERS,
+      body: JSON.stringify(userInfo)
+    })
+    if (res.ok) {
+      const data = await res.json()
+      setCurrentUser(data)
+    } else {
+      alert('Invalid sign up')
+    }
+  }
+
+  async function attemptLogin(userInfo) {
+    const res = await fetch(URL + '/login', {
+      method: 'POST',
+      headers: POST_HEADERS,
+      body: JSON.stringify(userInfo)
+    })
+    if (res.ok) {
+      const data = await res.json()
+      setCurrentUser(data)
+    } else {
+      alert('Invalid sign up')
+    }
+  }
+
+  function logout() {
+    setCurrentUser(null)
+    fetch(URL + '/logout', {
+      method: 'DELETE'
+    })
+  }
+
+
   return (
-    <AuthProvider>
-      <Router>
-        <Navbar />
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <UserDashboard/>
-            </ProtectedRoute>
-          } />
-          <Route path="/watchlist" element={<WatchList />} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+    <>
+      <UserPanel
+          currentUser={currentUser}
+          attemptLogin={attemptLogin}
+          attemptSignup={attemptSignup}
+          logout={logout} />
+      <MarketWatch/>
+    </>
   );
 }
 
