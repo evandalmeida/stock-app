@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, session
 from flask_migrate import Migrate
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin 
 from werkzeug.security import check_password_hash, generate_password_hash
 import yfinance as yf
 from models import db, User, Notification, Watchlist
@@ -10,21 +10,25 @@ app = Flask(__name__)
 # Configuration
 CORS(app, resources={
     r"/*": {
-        "origins": ["http://localhost:5555"],
+        "origins": ["http://localhost:3000"], 
         "methods": ["GET", "POST", "PUT", "DELETE"],
         "allow_headers": ["Content-Type", "Authorization"]
     }
 })
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 app.secret_key = 'f9cf27c663bc31db958e7e7d2a994daa'
 
-GOOGLE_MAPS_API_KEY = "AIzaSyCTYs930QhE82JCgvnNEDiaCeJmHkjND1c"
+GOOGLE_MAPS_API_KEY = "paste key from discord"
 
 
 migrate = Migrate(app, db)
 db.init_app(app)
+
+
 
 
 @app.route('/')
@@ -76,9 +80,10 @@ def create_user():
             db.session.commit()
             return jsonify(new_user.to_dict()), 201
         else:
-            return jsonify({'error': 'Username and Password are required'}), 400
+            return jsonify({'error': 'Username and Password are required'}), 406  # Return a 406 status code with an error message
     except Exception as e:
-        return jsonify({'error': str(e)}), 406
+        return jsonify({'error': str(e)}), 406  # Return a 406 status code with an error message
+
 
 @app.post('/login')
 def login():
