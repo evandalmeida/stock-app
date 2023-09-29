@@ -25,9 +25,9 @@ CORS(app, resources={
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
-app.secret_key = ''
+app.secret_key = 
 
-GOOGLE_MAPS_API_KEY = ''
+GOOGLE_MAPS_API_KEY = 
 
 bcrypt = Bcrypt(app)
 

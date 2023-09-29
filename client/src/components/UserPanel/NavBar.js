@@ -5,10 +5,18 @@ export default function NavBar({ currentUser, logout }) {
   return (
     <nav className="navbar">
       <ul className="navbar-list">
-        <li className="navbar-item"><Link to="/dashboard">Dashboard</Link></li>
-        <li className="navbar-item"><Link to="/stocks">Stocks</Link></li>
-        <li className="navbar-item"><Link to="/market-watch">Market Watch</Link></li>
-        <li className="navbar-item"><Link to="/chat">Watch List and Chat</Link></li>
+        <li className="navbar-item">
+          <Link to="/dashboard" className="navbar-link">Dashboard</Link>
+        </li>
+        <li className="navbar-item">
+          <Link to="/stocks" className="navbar-link">Stocks</Link>
+        </li>
+        <li className="navbar-item">
+          <Link to="/market-watch" className="navbar-link">Market Watch</Link>
+        </li>
+        <li className="navbar-item">
+          <Link to="/chat" className="navbar-link">Watch List and Chat</Link>
+        </li>
         {currentUser ? (
           <div className="user-section">
             <li className="navbar-item">Welcome, {currentUser.username}</li>
@@ -18,8 +26,12 @@ export default function NavBar({ currentUser, logout }) {
           </div>
         ) : (
           <div className="auth-section">
-            <li className="navbar-item"><Link to="/signup">Signup</Link></li>
-            <li className="navbar-item"><Link to="/login">Login</Link></li>
+            <li className="navbar-item">
+              <Link to="/signup" className="navbar-link">Signup</Link>
+            </li>
+            <li className="navbar-item">
+              <Link to="/login" className="navbar-link">Login</Link>
+            </li>
           </div>
         )}
       </ul>

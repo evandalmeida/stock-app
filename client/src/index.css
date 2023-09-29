@@ -1,91 +1,225 @@
-/* App.css */
-
-/* Styles for the main App component */
+/* Global styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.custom-home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    72deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(255, 255, 255, 1) 100%,
+    rgba(0, 0, 0, 1) 100%
+  );
+}
+
+@keyframes moveBackground {
+  0% {
+    background-position: 0 0;
   }
-  
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+  100% {
+    background-position: 50px 87px;
   }
-  
-  /* Styles for the UserPanel component */
-  .user-form {
-    max-width: 400px;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles for the UserPanel component */
+.flex-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Styles for the UserDashboard component */
+.user-details {
+  background-color: #fff;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 800px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.user-details h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.navbar {
+  background-color: #2c3e50; /* Gunmetal or black background color */
+  color: #fff;
+  padding: 1vh;
+  border-radius: 0;
+  transition: background 0.5s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-image: radial-gradient(circle at 100% 100%, transparent 10%, #ccc 10px),
+    radial-gradient(circle at 0 100%, transparent 10%, #ccc 10px);
+  background-size: 20px 20px;
+}
+
+/* Navbar List Styles */
+.navbar-list {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Center items vertically */
+  padding: 0;
+  max-width: 100%; /* Make the navbar occupy the full width */
+}
+
+/* Navbar Link Styles */
+.navbar-item {
+  padding: 10px 15px; /* Adjust padding for spacing */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #c0392b; /* Darker red background color for links */
+  transition: background 0.3s; /* Smooth background transition on hover */
+  text-align: center; /* Center text horizontally */
+  margin: 0 5px; /* Add spacing between links */
+  white-space: nowrap; /* Prevent line breaks in links */
+}
+
+.navbar-item a {
+  color: #fff; /* Link text color */
+  text-decoration: none;
+}
+
+/* Hover Effect for Navbar Links */
+.navbar-item:hover {
+  background-color: #27ae60; /* Lighter green background color on hover */
+}
+
+/* User Section Styles */
+.user-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Logout Button Styles */
+.logout-button {
+  background-color: #c0392b; /* Button background color */
+  color: #fff;
+  border: none;
+  padding: 8px 15px; /* Increase horizontal padding for buttons */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s; /* Smooth background transition on hover */
+  margin-left: 10px; /* Add spacing between button and text */
+  animation: pulse 1s infinite; /* Add pulse animation to the button */
+}
+
+.logout-button:hover {
+  background-color: #27ae60; /* Button background color on hover */
+}
+
+/* Add margin to navbar items for spacing */
+.navbar-item + .navbar-item {
+  margin-left: 10px;
+}
+
+/* Keyframes Animation for Button Pulse */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
   }
-  
-  .user-form h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
+  50% {
+    transform: scale(1.1); /* Increase scale at 50% keyframe */
   }
-  
-  .user-form input[type="text"],
-  .user-form input[type="password"],
-  .user-form input[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    font-size: 16px;
+  100% {
+    transform: scale(1);
   }
-  
-  .user-form input[type="submit"] {
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-  }
-  
-  /* Styles for the UserDashboard component */
-  .user-details {
-    background-color: #fff;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 800px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .user-details h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  /* Styles for the NavBar component */
-  nav {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 0;
-  }
-  
-  nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    padding: 0;
-  }
-  
-  nav ul li {
-    margin: 0 10px;
-  }
-  
-  nav ul li a {
-    color: #fff;
-    text-decoration: none;
-  }
-  
-  /* Add more styles as needed for specific components */
-  
-  /* Styles for the NavBar component from NavBar.css */
-  .nav-welcome {
-    font-weight: bold;
-  }
-  
+}
+
+/* Chatbot Styles */
+.chatbot {
+  background-color: #fff;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 400px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles for the MarketWatch component */
+.market-watch {
+  width: 800px;
+  height: 400px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Center and align the main frame */
+.mainframe {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 30vh; /* Ensure it takes up the full viewport height */
+}
+
+.user-form {
+  max-width: 30vw;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  text-align: center; /* Center text horizontally within the form */
+}
+
+.box-title {
+  font-size: 2em;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 1em;
+  justify-content: center; /* Center text horizontally within inputs */
+}
+
+input[type="submit"] {
+  width: 50%;
+  padding: 10px;
+  background-color: #2b2b2b;
+  color: #148500;
+  border: none;
+  border-radius: 3px;
+  font-size: 18px;
+  cursor: pointer;
+  justify-content: center; /* Center text horizontally within submit buttons */
+}
+
+input[type="submit"]:hover {
+  background-color: #148500;
+}

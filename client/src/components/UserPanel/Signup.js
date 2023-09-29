@@ -13,7 +13,7 @@ export default function Signup({attemptSignup}) {
 
   return (
     <form className='user-form' onSubmit={handleSubmit}>
-      <h2>Signup</h2>
+      <h2 className='box-title'>Register</h2>
 
       <input type="text"
       onChange={handleChangeUsername}
@@ -29,8 +29,9 @@ export default function Signup({attemptSignup}) {
 
 
       <input type="submit"
-      value='Signup'
+      value='Register Account'
       />
     </form>
   )
 }
+

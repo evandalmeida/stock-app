@@ -62,7 +62,7 @@ export default function App() {
 
   function logout() {
     setCurrentUser(null);
-    fetch('/logout', {
+    fetch('/', {
       method: 'DELETE'
     });
   }

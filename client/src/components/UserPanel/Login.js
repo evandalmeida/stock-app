@@ -13,7 +13,7 @@ export default function Login({attemptLogin}) {
 
   return (
     <form className='user-form' onSubmit={handleSubmit}>
-      <h2>Login</h2>
+      <h2 className='box-title' >Log In</h2>
 
       <input type="text"
       onChange={handleChangeUsername}
@@ -29,7 +29,7 @@ export default function Login({attemptLogin}) {
 
 
       <input type="submit"
-      value='Login'
+      value='Click to Get Rich'
       />
 
     </form>
