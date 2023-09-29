@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function Login({attemptLogin}) {
+export default function Login({attemptLogin}) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const handleChangeUsername = e => setUsername(e.target.value)
@@ -34,7 +34,4 @@ function Login({attemptLogin}) {
 
     </form>
   )
-
 }
-
-export default Login

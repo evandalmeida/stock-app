@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function WatchList() {
+
+export default function WatchList() {
   const [stocks, setStocks] = useState([]);
   
   useEffect(() => {
@@ -21,5 +22,3 @@ function WatchList() {
     </div>
   );
 }
-
-export default WatchList;

@@ -1,0 +1,91 @@
+/* App.css */
+
+/* Styles for the main App component */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Styles for the UserPanel component */
+  .user-form {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .user-form h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .user-form input[type="text"],
+  .user-form input[type="password"],
+  .user-form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+  }
+  
+  .user-form input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  /* Styles for the UserDashboard component */
+  .user-details {
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .user-details h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Styles for the NavBar component */
+  nav {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 0;
+  }
+  
+  nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+  }
+  
+  nav ul li {
+    margin: 0 10px;
+  }
+  
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  /* Add more styles as needed for specific components */
+  
+  /* Styles for the NavBar component from NavBar.css */
+  .nav-welcome {
+    font-weight: bold;
+  }
+  

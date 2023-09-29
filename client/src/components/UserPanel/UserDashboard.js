@@ -1,15 +1,13 @@
 import React from 'react';
-import StocksList from '../StocksList';
-import WatchList from '../WatchList';
-import MarketWatch from '../MarketWatch';
-import ChatBot from '../ChatBot';
-import NavBar from '../NavBar';
+import StocksList from './StocksList';
+import MarketWatch from './MarketWatch';
+import NavBar from './NavBar';
 import { Navigate } from 'react-router-dom';
 
-function UserDashboard({ currentUser, logout }) {
-  // Check if currentUser exists and has a username property
+export default function UserDashboard({ currentUser, logout }) {
+
   if (!currentUser || !currentUser.username) {
-    // Redirect to home if no user is logged in
+  
     return <Navigate to="/" replace />;
   }
 
@@ -17,13 +15,8 @@ function UserDashboard({ currentUser, logout }) {
     <div className='user-details'>
       <h2>{currentUser.username}: User Dashboard</h2>
       <NavBar currentUser={currentUser} logout={logout} />
-      <StocksList />
-      <MarketWatch />
-      <WatchList />
-      <ChatBot />
-      <button onClick={logout}>Logout</button>
+      <StocksList/>
+      <MarketWatch/>
     </div>
   );
 }
-
-export default UserDashboard;

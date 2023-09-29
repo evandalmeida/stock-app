@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-function StocksList() {
+
+export default function StocksList() {
   const [stocks, setStocks] = useState([]);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,5 +57,3 @@ function StocksList() {
     : (<p>Search for stocks using the search bar above.</p>)}</div>
   );
 }
-
-export default StocksList;

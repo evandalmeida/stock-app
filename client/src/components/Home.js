@@ -2,7 +2,7 @@ import React from 'react';
 import Signup from './UserPanel/Signup';
 import Login from './UserPanel/Login';
 
-function Home({ attemptLogin, attemptSignup }) {
+export default function Home({ attemptLogin, attemptSignup }) {
   return (
     <div className="flex-row">
       <Signup attemptSignup={attemptSignup} />
@@ -10,5 +10,3 @@ function Home({ attemptLogin, attemptSignup }) {
     </div>
   );
 }
-
-export default Home;

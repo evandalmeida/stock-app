@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
+
 const containerStyle = {
   width: '800px',
   height: '400px'
@@ -20,7 +21,7 @@ const locations = [
   { name: 'Canada', lat: 56.1304, lng: -106.3468 }
 ];
 
-function MarketWatch() {
+export default function MarketWatch() {
   const [apiKey, setApiKey] = useState("");
   const [error, setError] = useState(null); // Define error state
 
@@ -52,5 +53,3 @@ function MarketWatch() {
     </>
   );
 }
-
-export default MarketWatch;
