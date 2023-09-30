@@ -1,5 +1,5 @@
 import React from 'react';
-import StocksList from './StocksList';
+import StocksList from './Search';
 import MarketWatch from './MarketWatch';
 import NavBar from './NavBar';
 import { Navigate } from 'react-router-dom';
@@ -14,7 +14,6 @@ export default function UserDashboard({ currentUser, logout }) {
   return (
     <div className='user-details'>
       <NavBar currentUser={currentUser} logout={logout} />
-      <h2>{currentUser.username.toUpperCase()}'s User Dashboard</h2>
       <StocksList />
       <MarketWatch />
     </div>

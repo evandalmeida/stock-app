@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 
-export default function StocksList() {
+export default function Search() {
   const [stocks, setStocks] = useState([]);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,17 +24,19 @@ export default function StocksList() {
 
   return (
     <div>
-      <h1>Search Stocks</h1>
+      <h1 className='search-heading'>Search Stocks</h1>
 
-      <div>
-        <input 
-          type="text" 
-          value={searchQuery} 
-          onChange={e => setSearchQuery(e.target.value)} 
-          placeholder="Enter stock symbol..."
-        />
-        <button onClick={searchStock}>Search</button>
-      </div>
+      <div className="search-container">
+      <input 
+        type="text"
+        value={searchQuery} 
+        onChange={e => setSearchQuery(e.target.value)} 
+        placeholder="Enter stock symbol..."
+        className="search-input"
+      />
+      <button onClick={searchStock} className="search-button">Search</button>
+    </div>
+
 
       {error ? (
         <p>{error}</p>

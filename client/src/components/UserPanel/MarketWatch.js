@@ -4,7 +4,7 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 const containerStyle = {
   width: '800px',
   height: '400px',
-  borderRadius: '5px'
+  borderRadius: '3vh'
 };
 
 const center = {
@@ -37,23 +37,23 @@ const indexFunds = {
 
 const locations = [
   { name: 'United States', 
-    lat: 30.0902, 
-    lng: -95.7129 
+    lat: 23.0902, 
+    lng: -100.7129 
   },
   { name: 'Europe',
-    lat: 54.5260,
+    lat: 34.5260,
     lng: 15.2551
   },
   { name: 'Asia',
-    lat: 34.0479, 
+    lat: 25.0479, 
     lng: 100.6197
   },
   { name: 'Australia',
-    lat: -30.2744,
+    lat: -43.2744,
     lng: 133.7751 
   },
   { name: 'Canada', 
-    lat: 50.1304, 
+    lat: 47.1304, 
     lng: -106.3468
   }
 ];
@@ -79,23 +79,24 @@ export default function MarketWatch() {
         <p>{error}</p>
       ) : apiKey ? (
         <LoadScript googleMapsApiKey={apiKey}>
-          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={2}>
+          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={1.7}>
             {locations.map((location, index) => {
               // Example condition: Generate a random boolean to determine pin color
               const isRedPin = Math.random() < 0.5;
 
               return (
                 <Marker
-                  key={index}
-                  position={location}
-                  title={location.name}
-                  icon={{
-                    url: isRedPin
-                      ? 'https://www.freeiconspng.com/uploads/red-spot-light-png-6.png'
-                      : 'https://freepngimg.com/save/34148-green-light-transparent-image/980x725',
-                    scaledSize: { width: 100, height: 100 }
-                  }}
-                />
+                key={index}
+                position={location}
+                title={location.name}
+                icon={{
+                  url: isRedPin
+                    ? 'https://www.freeiconspng.com/uploads/red-spot-light-png-6.png'
+                    : 'https://freepngimg.com/save/34148-green-light-transparent-image/980x725',
+                  scaledSize: { width: 100, height: 95 }
+                }}
+              />
+              
               );
             })}
           </GoogleMap>

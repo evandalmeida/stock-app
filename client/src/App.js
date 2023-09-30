@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import UserPanel from './components/UserPanel/user_index';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import UserDashboard from './components/UserPanel/UserDashboard';
-import UDashStocksGraphs from './components/UserPanel/UDashStocksGraphs';
+import UDashSearch from './components/UserPanel/UDashSearch';
 import UDashMarketWatch from './components/UserPanel/UDashMarketWatch';
-import UDashWatchListandCaht from './components/UserPanel/UDashWatchListandChat';
+import UDashWatchList from './components/UserPanel/UDashWatchList';
+import UDashChat from './components/UserPanel/UDashChat';
 import Home from './components/Home';
 import Login from './components/UserPanel/Login'; // Import the Login component
 
@@ -71,9 +72,10 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/dashboard" element={currentUser ? <UserDashboard currentUser={currentUser} logout={logout} /> : <Navigate to="/" />} />
-        <Route path="/stocks" element={<UDashStocksGraphs currentUser={currentUser} logout={logout} />} />
+        <Route path="/stocks" element={<UDashSearch currentUser={currentUser} logout={logout} />} />
         <Route path="/market-watch" element={<UDashMarketWatch currentUser={currentUser} logout={logout} />} />
-        <Route path="/chat" element={<UDashWatchListandCaht currentUser={currentUser} logout={logout} />} />
+        <Route path="/watchlists" element={<UDashWatchList currentUser={currentUser} logout={logout} />} />
+        <Route path="/chat" element={<UDashChat currentUser={currentUser} logout={logout} />} />
         <Route path="/signup" element={<UserPanel currentUser={currentUser} attemptLogin={attemptLogin} attemptSignup={attemptSignup} logout={logout} />} />
         <Route path="/login" element={currentUser ? <Navigate to="/dashboard" /> : <Login attemptLogin={attemptLogin} />} />
         <Route
