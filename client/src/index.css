@@ -17,6 +17,9 @@ body {
   align-items: center;
   min-height: 100vh;
 }
+  .mainframe{
+    align-self: center;
+  }
 
 /* Styles for the UserPanel component */
 .flex-row {
