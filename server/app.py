@@ -99,6 +99,21 @@ def create_user():
 
     
     
+@app.route('/api/candlestick-data/<symbol>')
+def candlestick_data(symbol):
+    ticker = yf.Ticker(symbol)
+    hist = ticker.history(period="5d", interval="1d")  # fetches 5 days of daily data
+    if hist.empty:
+        return jsonify({'error': 'Could not fetch stock details'}), 500
+    
+    # Extract the required data
+    ohlc = hist[['Open', 'High', 'Low', 'Close', 'Volume']].values.tolist()
+    dates = hist.index.tolist()
+
+    return jsonify({
+        "ohlc": ohlc,
+        "dates": dates
+    })
 
 
 @app.route('/api/add-to-watchlist', methods=['POST'])
