@@ -8,6 +8,7 @@ export default function UDashSearch( {currentUser, logout}){
     return (
       <>
         <div className='user-details'>
+        <header class="page-title">StockWatcher</header>
           <NavBar currentUser={currentUser} logout={logout} />
           <Search/>
         </div>

@@ -7,6 +7,7 @@ export default function UDashMarketWatch( {currentUser, logout}){
     return (
       <>
         <div className='user-details'>
+        <header class="page-title">StockWatcher</header>
           <NavBar currentUser={currentUser} logout={logout} />
           <MarketWatch/>
         </div>

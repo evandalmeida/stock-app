@@ -10,7 +10,8 @@ export default function Home({ attemptLogin, attemptSignup }) {
   return (
     <>
     <div className="custom-home">
-      <img src={logoImage} alt="Logo" className="mainframe" />
+    <header class="page-title">StockWatcher</header>
+      <img src={logoImage} alt="Logo" className="homepagepicture" />
       <Signup attemptSignup={attemptSignup} />
       <Login attemptLogin={attemptLogin} />
     </div>
