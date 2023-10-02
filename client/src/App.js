@@ -7,13 +7,13 @@ import UDashMarketWatch from './components/UserPanel/UDashMarketWatch';
 import UDashWatchList from './components/UserPanel/UDashWatchList';
 import UDashChat from './components/UserPanel/UDashChat';
 import Home from './components/Home';
-import Login from './components/UserPanel/Login'; // Import the Login component
-
+import Login from './components/UserPanel/Login';
+import { WatchlistProvider } from './components/UserPanel/WatchListContext'; // Import the WatchlistProvider
 
 const POST_HEADERS = {
   'Content-Type': 'application/json',
   'Accepts': 'application/json'
-}
+};
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -46,7 +46,7 @@ export default function App() {
   }
 
   async function attemptLogin(userInfo) {
-    const res = await fetch('login', {
+    const res = await fetch('/login', {
       method: 'POST',
       headers: POST_HEADERS,
       body: JSON.stringify(userInfo)
@@ -54,10 +54,10 @@ export default function App() {
     if (res.ok) {
       const data = await res.json();
       setCurrentUser(data);
-      return true; // Return true for successful login
+      return true;
     } else {
       alert('Invalid login');
-      return false; // Return false for unsuccessful login
+      return false;
     }
   }
 
@@ -70,19 +70,18 @@ export default function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/dashboard" element={currentUser ? <UserDashboard currentUser={currentUser} logout={logout} /> : <Navigate to="/" />} />
-        <Route path="/stocks" element={<UDashSearch currentUser={currentUser} logout={logout} />} />
-        <Route path="/market-watch" element={<UDashMarketWatch currentUser={currentUser} logout={logout} />} />
-        <Route path="/watchlists" element={<UDashWatchList currentUser={currentUser} logout={logout} />} />
-        <Route path="/chat" element={<UDashChat currentUser={currentUser} logout={logout} />} />
-        <Route path="/signup" element={<UserPanel currentUser={currentUser} attemptLogin={attemptLogin} attemptSignup={attemptSignup} logout={logout} />} />
-        <Route path="/login" element={currentUser ? <Navigate to="/dashboard" /> : <Login attemptLogin={attemptLogin} />} />
-        <Route
-          path="/"
-          element={currentUser ? <Navigate to="/dashboard" /> : <Home attemptLogin={attemptLogin} attemptSignup={attemptSignup} />}
-        />
-      </Routes>
+        <WatchlistProvider>  {/* Wrap your Routes with WatchlistProvider */}
+            <Routes>
+                <Route path="/dashboard" element={currentUser ? <UserDashboard currentUser={currentUser} logout={logout} /> : <Navigate to="/" />} />
+                <Route path="/stocks" element={<UDashSearch currentUser={currentUser} logout={logout} />} />
+                <Route path="/market-watch" element={<UDashMarketWatch currentUser={currentUser} logout={logout} />} />
+                <Route path="/watchlists" element={<UDashWatchList currentUser={currentUser} logout={logout} />} />
+                <Route path="/chat" element={<UDashChat currentUser={currentUser} logout={logout} />} />
+                <Route path="/signup" element={<UserPanel currentUser={currentUser} attemptLogin={attemptLogin} attemptSignup={attemptSignup} logout={logout} />} />
+                <Route path="/login" element={currentUser ? <Navigate to="/dashboard" /> : <Login attemptLogin={attemptLogin} />} />
+                <Route path="/" element={currentUser ? <Navigate to="/dashboard" /> : <Home attemptLogin={attemptLogin} attemptSignup={attemptSignup} />} />
+            </Routes>
+        </WatchlistProvider>
     </Router>
-  );
+);
 }
