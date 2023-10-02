@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from flask_cors import CORS, cross_origin 
 from flask_bcrypt import Bcrypt
 import yfinance as yf
-from models import db, User, Notification, Watchlist
+from models import db, User, Notification, Watchlist, Stock
 from models import bcrypt 
 
 
@@ -25,6 +25,9 @@ CORS(app, resources={
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
+app.secret_key = 'f9cf27c663bc31db958e7e7d2a994daa'
+
+GOOGLE_MAPS_API_KEY = 'AIzaSyB0APrXR-YPQa-0BAj8YwFvPT8r0C-jzxE'
 
 
 bcrypt = Bcrypt(app)
@@ -110,17 +113,36 @@ def add_to_watchlist():
     if not stock_symbol:
         return jsonify({'error': 'Stock symbol is required'}), 400
 
-    # Check if the stock already exists
+    # Fetch stock details using yfinance
+    ticker = yf.Ticker(stock_symbol)
+    stock_info = ticker.info
+
+    if not stock_info:
+        return jsonify({'error': 'Could not fetch stock details'}), 500
+
+    # Check if the stock already exists in the database
     stock = Stock.query.filter_by(symbol=stock_symbol).first()
     if not stock:
-        # If not, create a new stock entry
-        stock = Stock(symbol=stock_symbol, name=data.get('stock', {}).get('name'))
+        # If not, create a new stock entry with detailed information
+        stock = Stock(
+            symbol=stock_info.get('symbol', ''),
+            name=stock_info.get('longName', ''),
+            price=stock_info.get('currentPrice', ''),
+            fiftyTwoWeekHigh=stock_info.get('fiftyTwoWeekHigh', None),
+            fiftyTwoWeekLow=stock_info.get('fiftyTwoWeekLow', None),
+            marketCap=stock_info.get('marketCap', None),
+            volume=stock_info.get('volume', None),
+            dividendRate=stock_info.get('dividendRate', None),
+            dividendYield=stock_info.get('dividendYield', None),
+            trailingPE=stock_info.get('trailingPE', None),
+            forwardPE=stock_info.get('forwardPE', None)
+        )
         db.session.add(stock)
 
     # Check if the user has a watchlist
     watchlist = Watchlist.query.filter_by(user_id=user_id).first()
     if not watchlist:
-        watchlist = Watchlist(user_id=user_id, name="My Watchlist")  # or any default name
+        watchlist = Watchlist(user_id=user_id, name="My Watchlist")
         db.session.add(watchlist)
 
     # Check if the stock is already in the user's watchlist
@@ -132,6 +154,7 @@ def add_to_watchlist():
     db.session.commit()
 
     return jsonify({'message': 'Stock added to watchlist!'}), 201
+
 
 
 @app.route('/login', methods=['POST'])
@@ -189,8 +212,29 @@ def get_watchlist():
         return jsonify({'error': 'User not found'}), 404
     
     watchlist = Watchlist.query.filter_by(user_id=user.id).first()
-    stocks = [stock.to_dict() for stock in watchlist.stocks] if watchlist else []
-    return jsonify(stocks)
+    if not watchlist:
+        return jsonify([])
+
+    detailed_stocks = []
+    for stock in watchlist.stocks:
+        ticker = yf.Ticker(stock.symbol)
+        stock_info = ticker.info
+        detailed_stocks.append({
+            "symbol": stock_info.get('symbol', ''),
+            "name": stock_info.get('longName', ''),
+            "price": stock_info.get('currentPrice', ''),
+            "fiftyTwoWeekHigh": stock_info.get('fiftyTwoWeekHigh', None),
+            "fiftyTwoWeekLow": stock_info.get('fiftyTwoWeekLow', None),
+            "marketCap": stock_info.get('marketCap', None),
+            "volume": stock_info.get('volume', None),
+            "dividendRate": stock_info.get('dividendRate', None),
+            "dividendYield": stock_info.get('dividendYield', None),
+            "trailingPE": stock_info.get('trailingPE', None),
+            "forwardPE": stock_info.get('forwardPE', None)
+        })
+
+    return jsonify(detailed_stocks)
+
 
 @app.route('/api/remove-from-watchlist', methods=['POST'])
 def remove_from_watchlist():
