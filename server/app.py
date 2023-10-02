@@ -124,7 +124,6 @@ def create_user():
         print(e)  # Log the error for debugging
         db.session.rollback()
         return {'error': str(e)}, 500
-
 @app.route('/api/add-to-watchlist', methods=['POST'])
 def add_to_watchlist():
     user_id = session.get('user_id')

@@ -12,9 +12,7 @@ export default function UDashWatchListandChat( {currentUser, logout}){
                 <NavBar currentUser={currentUser} logout={logout} />
                 <ChatBot/>
             </div>
-            <footer>
-                <Footer/>
-            </footer>
+            <Footer/>
         </>
     )
 }

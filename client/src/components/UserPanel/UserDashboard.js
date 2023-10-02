@@ -17,12 +17,12 @@ export default function UserDashboard({ currentUser, logout }) {
     <div className='user-details'>
     <header class="page-title">StockWatcher</header>
       <NavBar currentUser={currentUser} logout={logout} />
+      <p>Welcome to MarketWatch, your trusted platform for tracking stock market data and making informed investment decisions. Our app is designed to empower investors and traders with real-time information and powerful tools.</p>
       <MarketWatch />
+      <p>At MarketWatch, our mission is to empower individuals with the knowledge and tools they need to make informed financial decisions. We are committed to:</p>
       <StocksList />
     </div>
-    <foorer>
-      <Footer/>
-    </foorer>
+    <Footer/>
     </>
   );
 }

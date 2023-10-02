@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
-
 const containerStyle = {
   width: '55vw',
   height: '60vh',
+  alignSelf: 'center'
 };
 
 const center = {

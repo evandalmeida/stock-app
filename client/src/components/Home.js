@@ -15,9 +15,7 @@ export default function Home({ attemptLogin, attemptSignup }) {
       <Signup attemptSignup={attemptSignup} />
       <Login attemptLogin={attemptLogin} />
     </div>
-    <footer>
-      <Footer/>
-    </footer>
+    <Footer/>
     </>
   );
 }
