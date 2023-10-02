@@ -3,17 +3,11 @@ from flask_migrate import Migrate
 from flask_cors import CORS, cross_origin 
 from flask_bcrypt import Bcrypt
 import yfinance as yf
-from models import db, User, Notification, Watchlist
+from models import db, User, Notification, Watchlist, Stock
 from models import bcrypt 
-
-
 
 app = Flask(__name__)
 
-
-
-
-# Configuration
 CORS(app, resources={
     r"/*": {
         "origins": ["http://localhost:3000", "http://localhost:5555",], 
@@ -93,11 +87,7 @@ def create_user():
         print(e)  # Log the error for debugging
         db.session.rollback()
         return {'error': str(e)}, 500
-
     
-    
-
-
 @app.route('/api/add-to-watchlist', methods=['POST'])
 def add_to_watchlist():
     user_id = session.get('user_id')
@@ -133,7 +123,6 @@ def add_to_watchlist():
 
     return jsonify({'message': 'Stock added to watchlist!'}), 201
 
-
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -144,10 +133,6 @@ def login():
         return jsonify(user.to_dict())
     else:
         return jsonify(message="Invalid username or password"), 401
-
-
-
-
 
 @app.delete('/logout')
 def logout():
@@ -221,7 +206,5 @@ def remove_from_watchlist():
 
     return jsonify({'message': 'Stock removed from watchlist!'}), 201
 
-
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
-    

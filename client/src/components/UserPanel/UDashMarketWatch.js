@@ -10,9 +10,7 @@ export default function UDashMarketWatch( {currentUser, logout}){
           <NavBar currentUser={currentUser} logout={logout} />
           <MarketWatch/>
         </div>
-        <footer>
-          <Footer/>
-        </footer>
+        <Footer/>
       </>
     )
 }

@@ -11,9 +11,7 @@ export default function UDashWatchListandChat( {currentUser, logout}){
           <NavBar currentUser={currentUser} logout={logout} />
           <WatchList/>
         </div>
-        <footer>
-          <Footer/>
-        </footer>
+        <Footer/>
       </>
     )
 }

@@ -11,9 +11,7 @@ export default function UDashSearch( {currentUser, logout}){
           <NavBar currentUser={currentUser} logout={logout} />
           <Search/>
         </div>
-        <footer>
-          <Footer/>
-        </footer>
+        <Footer/>
       </>
     )
 }
