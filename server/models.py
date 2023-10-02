@@ -11,7 +11,6 @@ metadata = MetaData(naming_convention={
 bcrypt = Bcrypt()
 db = SQLAlchemy(metadata=metadata)
 
-db = SQLAlchemy()
 
 class User(db.Model, SerializerMixin):
     # TABLE #

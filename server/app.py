@@ -9,7 +9,7 @@ from models import bcrypt
 
 
 app = Flask(__name__)
-bcrypt.init_app(app)
+
 
 
 
@@ -25,9 +25,7 @@ CORS(app, resources={
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
-app.secret_key =
 
-GOOGLE_MAPS_API_KEY = 
 
 bcrypt = Bcrypt(app)
 
@@ -77,22 +75,63 @@ def get_maps_config():
         "apiKey": GOOGLE_MAPS_API_KEY
     })
 
-@app.post('/users')
+@app.route('/users', methods=['POST'])
 def create_user():
     try:
         data = request.json
-        hashed_pw = bcrypt.generate_password_hash(data["password"].encode('utf-8'),10)
-        new_user = User.create(username=data['username'], hashed_password=hashed_pw)
-
+        hashed_pw = bcrypt.generate_password_hash(data["password"].encode('utf-8'), 10)
         
+        # Creating the new user
+        new_user = User.create(username=data['username'], hashed_password=hashed_pw)
+        
+        # Committing the user to the database
+        db.session.commit()
+
         session['user_id'] = new_user.id
         return new_user.to_dict(), 201
     except Exception as e:
-        return { 'error': str(e) }, 406
+        print(e)  # Log the error for debugging
+        db.session.rollback()
+        return {'error': str(e)}, 500
+
     
     
 
 
+@app.route('/api/add-to-watchlist', methods=['POST'])
+def add_to_watchlist():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    data = request.json
+    stock_symbol = data.get('stock', {}).get('symbol')
+
+    if not stock_symbol:
+        return jsonify({'error': 'Stock symbol is required'}), 400
+
+    # Check if the stock already exists
+    stock = Stock.query.filter_by(symbol=stock_symbol).first()
+    if not stock:
+        # If not, create a new stock entry
+        stock = Stock(symbol=stock_symbol, name=data.get('stock', {}).get('name'))
+        db.session.add(stock)
+
+    # Check if the user has a watchlist
+    watchlist = Watchlist.query.filter_by(user_id=user_id).first()
+    if not watchlist:
+        watchlist = Watchlist(user_id=user_id, name="My Watchlist")  # or any default name
+        db.session.add(watchlist)
+
+    # Check if the stock is already in the user's watchlist
+    if stock in watchlist.stocks:
+        return jsonify({'message': 'Stock already in watchlist'}), 200
+
+    # Add the stock to the user's watchlist
+    watchlist.stocks.append(stock)
+    db.session.commit()
+
+    return jsonify({'message': 'Stock added to watchlist!'}), 201
 
 
 @app.route('/login', methods=['POST'])
@@ -152,6 +191,36 @@ def get_watchlist():
     watchlist = Watchlist.query.filter_by(user_id=user.id).first()
     stocks = [stock.to_dict() for stock in watchlist.stocks] if watchlist else []
     return jsonify(stocks)
+
+@app.route('/api/remove-from-watchlist', methods=['POST'])
+def remove_from_watchlist():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    data = request.json
+    stock_symbol = data.get('stock', {}).get('symbol')
+
+    if not stock_symbol:
+        return jsonify({'error': 'Stock symbol is required'}), 400
+
+    stock = Stock.query.filter_by(symbol=stock_symbol).first()
+    if not stock:
+        return jsonify({'message': 'Stock not found'}), 404
+
+    watchlist = Watchlist.query.filter_by(user_id=user_id).first()
+    if not watchlist:
+        return jsonify({'message': 'Watchlist not found'}), 404
+
+    if stock not in watchlist.stocks:
+        return jsonify({'message': 'Stock not in watchlist'}), 200
+
+    # Remove the stock from the watchlist
+    watchlist.stocks.remove(stock)
+    db.session.commit()
+
+    return jsonify({'message': 'Stock removed from watchlist!'}), 201
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
