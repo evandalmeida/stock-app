@@ -1,22 +1,17 @@
 from flask import Flask, request, jsonify, session
 from flask_migrate import Migrate
-from flask_cors import CORS, cross_origin 
+from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 import yfinance as yf
 from models import db, User, Notification, Watchlist, Stock
-from models import bcrypt 
-
-
+import openai
+import json
 
 app = Flask(__name__)
 
-
-
-
-# Configuration
 CORS(app, resources={
     r"/*": {
-        "origins": ["http://localhost:3000", "http://localhost:5555",], 
+        "origins": ["http://localhost:3000", "http://localhost:5555"],
         "methods": ["GET", "POST", "PUT", "DELETE"],
         "allow_headers": ["Content-Type", "Authorization"]
     }
@@ -27,19 +22,54 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
 
-
 bcrypt = Bcrypt(app)
 
 migrate = Migrate(app, db)
 db.init_app(app)
 
-def logged_in_user():
-    return User.query.filter(User.id == session.get('user_id')).first()
+openai.api_key = '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'
 
-def authorize():
-    if not logged_in_user():
-        return {'message': "No logged in user"}, 401
+# Define your functions here
 
+def getStockPrice(ticker):
+    return str(yf.Ticker(ticker).history(period='1y').iloc[-1].Close)
+
+def calculateSMA(ticker, window):
+    data = yf.Ticker(ticker).history(period='1y').Close
+    return str(data.rolling(window=window).mean().iloc[-1])
+
+def calculateEMA(ticker, window):
+    data = yf.Ticker(ticker).history(period='1y').Close
+    return str(data.ewm(span=window, adjust=False).mean().iloc[-1])
+
+def calculateRSI(ticker):
+    data = yf.Ticker(ticker).history(period='1y').Close
+    delta = data.diff()
+    up = delta.clip(lower=0)
+    down = -1 * delta.clip(upper=0)
+    ema_up = up.ewm(com=14 - 1, adjust=False).mean()
+    ema_down = down.ewm(com=14 - 1, adjust=False).mean()
+    rs = ema_up / ema_down
+    return str(100 - (100 / (1 + rs)).iloc[-1])
+
+def calculateMACD(ticker):
+    data = yf.Ticker(ticker).history(period='1y').Close
+    short_EMA = data.ewm(span=12, adjust=False).mean()
+    long_EMA = data.ewm(span=26, adjust=False).mean()
+
+    MACD = short_EMA - long_EMA
+    signal = MACD.ewm(span=9, adjust=False).mean()
+    MACD_histogram = MACD - signal
+
+    return f'{MACD[-1]}, {signal[-1]}, {MACD_histogram[-1]}'
+
+functions = {
+    'getStockPrice': getStockPrice,
+    'calculateSMA': calculateSMA,
+    'calculateEMA': calculateEMA,
+    'calculateRSI': calculateRSI,
+    'calculateSMACD': calculateMACD
+}
 @app.route('/')
 def index():
     return "Welcome to the Homepage!"
@@ -81,10 +111,10 @@ def create_user():
     try:
         data = request.json
         hashed_pw = bcrypt.generate_password_hash(data["password"].encode('utf-8'), 10)
-        
+
         # Creating the new user
         new_user = User.create(username=data['username'], hashed_password=hashed_pw)
-        
+
         # Committing the user to the database
         db.session.commit()
 
@@ -94,25 +124,6 @@ def create_user():
         print(e)  # Log the error for debugging
         db.session.rollback()
         return {'error': str(e)}, 500
-
-    
-    
-@app.route('/api/candlestick-data/<symbol>')
-def candlestick_data(symbol):
-    ticker = yf.Ticker(symbol)
-    hist = ticker.history(period="5d", interval="1d")  # fetches 5 days of daily data
-    if hist.empty:
-        return jsonify({'error': 'Could not fetch stock details'}), 500
-    
-    # Extract the required data
-    ohlc = hist[['Open', 'High', 'Low', 'Close', 'Volume']].values.tolist()
-    dates = hist.index.tolist()
-
-    return jsonify({
-        "ohlc": ohlc,
-        "dates": dates
-    })
-
 
 @app.route('/api/add-to-watchlist', methods=['POST'])
 def add_to_watchlist():
@@ -126,36 +137,17 @@ def add_to_watchlist():
     if not stock_symbol:
         return jsonify({'error': 'Stock symbol is required'}), 400
 
-    # Fetch stock details using yfinance
-    ticker = yf.Ticker(stock_symbol)
-    stock_info = ticker.info
-
-    if not stock_info:
-        return jsonify({'error': 'Could not fetch stock details'}), 500
-
-    # Check if the stock already exists in the database
+    # Check if the stock already exists
     stock = Stock.query.filter_by(symbol=stock_symbol).first()
     if not stock:
-        # If not, create a new stock entry with detailed information
-        stock = Stock(
-            symbol=stock_info.get('symbol', ''),
-            name=stock_info.get('longName', ''),
-            price=stock_info.get('currentPrice', ''),
-            fiftyTwoWeekHigh=stock_info.get('fiftyTwoWeekHigh', None),
-            fiftyTwoWeekLow=stock_info.get('fiftyTwoWeekLow', None),
-            marketCap=stock_info.get('marketCap', None),
-            volume=stock_info.get('volume', None),
-            dividendRate=stock_info.get('dividendRate', None),
-            dividendYield=stock_info.get('dividendYield', None),
-            trailingPE=stock_info.get('trailingPE', None),
-            forwardPE=stock_info.get('forwardPE', None)
-        )
+        # If not, create a new stock entry
+        stock = Stock(symbol=stock_symbol, name=data.get('stock', {}).get('name'))
         db.session.add(stock)
 
     # Check if the user has a watchlist
     watchlist = Watchlist.query.filter_by(user_id=user_id).first()
     if not watchlist:
-        watchlist = Watchlist(user_id=user_id, name="My Watchlist")
+        watchlist = Watchlist(user_id=user_id, name="My Watchlist")  # or any default name
         db.session.add(watchlist)
 
     # Check if the stock is already in the user's watchlist
@@ -168,22 +160,16 @@ def add_to_watchlist():
 
     return jsonify({'message': 'Stock added to watchlist!'}), 201
 
-
-
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
     user = User.query.filter_by(username=data['username']).first()
-    
+
     if user and bcrypt.check_password_hash(user.password_hash.encode('utf-8'), data["password"].encode('utf-8')):
         session['user_id'] = user.id
         return jsonify(user.to_dict())
     else:
         return jsonify(message="Invalid username or password"), 401
-
-
-
-
 
 @app.delete('/logout')
 def logout():
@@ -213,41 +199,20 @@ def create_notification():
         return jsonify(new_note.to_dict()), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 406
-    
+
 @app.get('/api/watchlist')
 def get_watchlist():
     user_id = session.get('user_id')
     if not user_id:
         return jsonify({'error': 'Unauthorized'}), 401
-    
+
     user = User.query.get(user_id)
     if not user:
         return jsonify({'error': 'User not found'}), 404
-    
+
     watchlist = Watchlist.query.filter_by(user_id=user.id).first()
-    if not watchlist:
-        return jsonify([])
-
-    detailed_stocks = []
-    for stock in watchlist.stocks:
-        ticker = yf.Ticker(stock.symbol)
-        stock_info = ticker.info
-        detailed_stocks.append({
-            "symbol": stock_info.get('symbol', ''),
-            "name": stock_info.get('longName', ''),
-            "price": stock_info.get('currentPrice', ''),
-            "fiftyTwoWeekHigh": stock_info.get('fiftyTwoWeekHigh', None),
-            "fiftyTwoWeekLow": stock_info.get('fiftyTwoWeekLow', None),
-            "marketCap": stock_info.get('marketCap', None),
-            "volume": stock_info.get('volume', None),
-            "dividendRate": stock_info.get('dividendRate', None),
-            "dividendYield": stock_info.get('dividendYield', None),
-            "trailingPE": stock_info.get('trailingPE', None),
-            "forwardPE": stock_info.get('forwardPE', None)
-        })
-
-    return jsonify(detailed_stocks)
-
+    stocks = [stock.to_dict() for stock in watchlist.stocks] if watchlist else []
+    return jsonify(stocks)
 
 @app.route('/api/remove-from-watchlist', methods=['POST'])
 def remove_from_watchlist():
@@ -279,6 +244,23 @@ def remove_from_watchlist():
     return jsonify({'message': 'Stock removed from watchlist!'}), 201
 
 
+@app.route('/api/chat', methods=['POST'])
+def chat():
+    user_input = request.json.get('user_input', '')
+
+    try:
+        response = openai.ChatCompletion.create(
+            model='gpt-3.5-turbo-0613',
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": user_input}
+            ]
+        )
+
+        response_message = response['choices'][0]['message']
+        return jsonify({'message': response_message['content']})
+    except Exception as e:
+        return jsonify({'message': 'An error occurred while processing your request.'})
+
 if __name__ == '__main__':
-    app.run(port=5555, debug=True)
-    
+    app.run(debug=True)
