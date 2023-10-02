@@ -3,6 +3,7 @@ import StocksList from './Search';
 import MarketWatch from './MarketWatch';
 import NavBar from './NavBar';
 import { Navigate } from 'react-router-dom';
+import Footer from '../FooterPanel/Footer'
 
 export default function UserDashboard({ currentUser, logout }) {
 
@@ -12,10 +13,15 @@ export default function UserDashboard({ currentUser, logout }) {
   }
 
   return (
+    <>
     <div className='user-details'>
       <NavBar currentUser={currentUser} logout={logout} />
-      <StocksList />
       <MarketWatch />
+      <StocksList />
     </div>
+    <foorer>
+      <Footer/>
+    </foorer>
+    </>
   );
 }
