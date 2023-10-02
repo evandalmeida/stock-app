@@ -1,10 +1,9 @@
-/* Global styles */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background: black;
+  color: #fff;
   margin: 0;
   padding: 0;
-  background: black;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,42 +16,24 @@ body {
   align-items: center;
   min-height: 100vh;
 }
-  .mainframe{
-    align-self: center;
-  }
 
-/* Styles for the UserPanel component */
-.flex-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-/* Styles for the UserDashboard component */
-.user-details {
-  background-color: transparent;
-  margin-top: 20vh;
-  max-width: 800px;
+.mainframe {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 20vh;
+  top: 0;
+  align-self: flex-start;
+  margin-left: 3vw;
+  margin-top: 5vh;
+  position: fixed;
 }
 
-.user-details h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* Navbar Styles */
 .navbar {
   background-color: transparent;
   margin-top: 10vh;
   color: #fff;
-  padding:10vw;
-  padding: 1vh;
   border-radius: 0;
   display: flex;
   justify-content: center;
@@ -62,18 +43,14 @@ body {
   top: 0;
 }
 
-
-/* Navbar List Styles */
 .navbar-list {
   list-style: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
   max-width: 75%;
 }
 
-/* Navbar Link Styles */
 .navbar-item {
   display: flex;
   flex-direction: column;
@@ -92,19 +69,17 @@ body {
   text-decoration: none;
 }
 
-/* Hover Effect for Navbar Links */
 .navbar-item:hover {
   background-color: #27ae60;
 }
 
-/* User Section Styles */
 .user-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 5vh;
-  margin-right: 5vw;
+  margin-right: 3vw;
   align-self: flex-end;
   position: fixed;
   padding: 10px;
@@ -112,7 +87,6 @@ body {
   right: 0;
 }
 
-/* Logout Button Styles */
 .logout-button {
   background-color: #27ae60;
   padding: 8px 15px;
@@ -130,12 +104,6 @@ body {
   background-color: #c0392b;
 }
 
-/* Navbar Item Spacing */
-.navbar-item + .navbar-item {
-  margin-left: 10px;
-}
-
-/* Keyframes */
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -148,7 +116,6 @@ body {
   }
 }
 
-/* Chatbot Styles */
 .chatbot {
   background-color: #fff;
   padding: 20px;
@@ -162,7 +129,6 @@ body {
   align-items: center;
 }
 
-/* Market Watch Styles */
 .market-watch {
   width: 800px;
   height: 400px;
@@ -176,20 +142,29 @@ body {
   align-items: center;
 }
 
-/* Mainframe Styles */
-.mainframe {
+.flex-row {
   display: flex;
-  margin-left: 5vw;
-  margin-top: 5vh;
-  position: fixed;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  height: 20vh;
-  top:0;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-/* Signin and Register Form Styles */
+.user-details {
+  background-color: transparent;
+  margin-top: 20vh;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-details h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 .signin-form,
 .register-form {
   width: 30vw;
@@ -204,7 +179,6 @@ body {
   align-items: center;
 }
 
-/* Box Title Styles */
 .box-title {
   font-size: 2em;
   text-align: center;
@@ -212,7 +186,6 @@ body {
   color: white;
 }
 
-/* Input Styles */
 input[type="text"],
 input[type="password"] {
   width: 90%;
@@ -223,7 +196,6 @@ input[type="password"] {
   font-size: 1em;
 }
 
-/* Button Styles */
 input[type="submit"],
 button {
   width: 100%;
@@ -235,14 +207,12 @@ button {
   cursor: pointer;
 }
 
-/* Button Hover Styles */
 input[type="submit"]:hover,
 button:hover {
   background-color: transparent;
   color: #27ae60;
 }
 
-/* Search Container Styles */
 .search-container {
   display: flex;
   flex-direction: column;
@@ -250,27 +220,23 @@ button:hover {
   align-items: center;
 }
 
-/* Search Heading Styles */
 .search-heading {
   font-size: 24px;
   color: white;
   text-align: center;
 }
 
-/* Search Input Container Styles */
 .search-input-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Search Input Styles */
 .search-input {
   padding: 10px;
   margin-bottom: 10px;
 }
 
-/* Search Button Styles */
 .search-button {
   padding: 10px 20px;
   background-color: #2b2b2b;
@@ -281,7 +247,6 @@ button:hover {
   cursor: pointer;
 }
 
-/* Dashboard Heading Styles */
 .dashheading {
   font-size: 24px;
   color: white;
@@ -289,7 +254,6 @@ button:hover {
   margin-top: 20px;
 }
 
-/* Card Container Styles */
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -297,7 +261,6 @@ button:hover {
   margin-top: 20px;
 }
 
-/* Card Styles */
 .card {
   background-color: #fff;
   padding: 10px;
@@ -308,18 +271,15 @@ button:hover {
   text-align: center;
 }
 
-/* Card Title Styles */
 .card-title {
   font-size: 18px;
   font-weight: bold;
 }
 
-/* Card Detail Styles */
 .card-detail {
   margin-top: 5px;
 }
 
-/* Return Button Styles */
 .return-button {
   padding: 10px 20px;
   background-color: #2b2b2b;
@@ -330,12 +290,10 @@ button:hover {
   cursor: pointer;
 }
 
-/* Return Button Hover Styles */
 .return-button:hover {
   background-color: #27ae60;
 }
 
-/* .bar Styles */
 .bar {
   display: flex;
   justify-content: space-between;
@@ -344,7 +302,99 @@ button:hover {
   padding: 10px;
 }
 
-.mainframe {
-  align-self: flex-start;
+.market-watch {
+  width: 800px;
+  height: 400px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin: 80px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
+.map {
+  border-radius: 8%;
+}
+
+.footer {
+  background-color: #2b2b2b;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.footer-list {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 50vw;
+}
+
+.footer-items {
+  text-decoration: none;
+  color: #fff;
+  padding: 10px;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+
+.footer-items:hover {
+  color: #27ae60;
+}
+
+/* Mission Styles */
+.mission-container {
+  background-color: #2b2b2b;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  margin-top: 20px; /* Adjust the margin-top as needed */
+}
+
+.mission-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Help Styles */
+.help-container {
+  background-color: #2b2b2b;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  margin-top: 20px; /* Adjust the margin-top as needed */
+}
+
+.help-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* About Styles */
+.about-container {
+  background-color: #2b2b2b;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  margin-top: 20px; /* Adjust the margin-top as needed */
+}
+
+.about-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}

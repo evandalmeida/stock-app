@@ -1,16 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logoImage from '../../globspin.gif'; // Replace with the actual path
-
-
-
+import logoImage from '../../globspin.gif'; 
 
 export default function NavBar({ currentUser, logout }) {
   return (
     <div className="bar">
       <div><img src={logoImage} alt="Logo" className="mainframe" /></div>
       <div className="user-section">
-        <p className="dashheading">Welcome, {currentUser.username}</p>
+        <p className="dashheading">Welcome, {currentUser.username.toUpperCase()}</p>
         {currentUser ? (<button className="logout-button" onClick={logout}>Logout</button>) : (<p><Link to="/">Home</Link></p>)}
       </div>
       <nav className="navbar">

@@ -7,8 +7,10 @@ import UDashMarketWatch from './components/UserPanel/UDashMarketWatch';
 import UDashWatchList from './components/UserPanel/UDashWatchList';
 import UDashChat from './components/UserPanel/UDashChat';
 import Home from './components/Home';
-import Login from './components/UserPanel/Login'; // Import the Login component
-
+import Login from './components/UserPanel/Login';
+import About from './components/FooterPanel/About';
+import Help from './components/FooterPanel/Help';
+import Mission from './components/FooterPanel/Mission';
 
 const POST_HEADERS = {
   'Content-Type': 'application/json',
@@ -54,10 +56,10 @@ export default function App() {
     if (res.ok) {
       const data = await res.json();
       setCurrentUser(data);
-      return true; // Return true for successful login
+      return true;
     } else {
       alert('Invalid login');
-      return false; // Return false for unsuccessful login
+      return false;
     }
   }
 
@@ -82,6 +84,9 @@ export default function App() {
           path="/"
           element={currentUser ? <Navigate to="/dashboard" /> : <Home attemptLogin={attemptLogin} attemptSignup={attemptSignup} />}
         />
+        <Route path="/about" element={<About/>}/>
+        <Route path="/mission" element={<Mission/>}/>
+        <Route path="/help" element={<Help/>}/>
       </Routes>
     </Router>
   );
